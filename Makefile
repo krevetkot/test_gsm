@@ -69,5 +69,9 @@ test: $(TARGET)
 	@expected=2; ./$(TARGET) ./test/t11.csv; $(CHECK)
 	@echo ""
 
+	@echo "Test 12: invalid string cell"
+	@expected=3; ./$(TARGET) ./test/t12.csv; $(CHECK)
+	@echo ""
+
 
 	@echo "All tests done"
