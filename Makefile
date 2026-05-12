@@ -11,7 +11,7 @@ CHECK = \
 	else \
 		echo "  FAIL: expected exit $$expected, got $$code"; \
 		exit 1; \
-	fi
+	fi; \
 
 
 .PHONY: all clean test
@@ -24,54 +24,29 @@ $(TARGET): $(SRC)
 clean:
 	rm -f $(TARGET)
 
+TESTS = \
+	1:t1.csv:0:basic_example_from_task \
+	2:t2.csv:0:integer_arithmetic \
+	3:t3.csv:0:negative_numbers \
+	4:t4.csv:3:division_by_zero \
+	5:t5.csv:3:circular_reference \
+	6:t6.csv:3:bad_cell_reference \
+	7:t7.csv:0:rows_not_in_order \
+	8:t0.csv:1:missing_file \
+	9:t9.csv:2:bad_header \
+	10:t10.csv:2:duplicate_row_id \
+	11:t11.csv:2:row_width_mismatch \
+	12:t12.csv:3:invalid_string_cell
+
 test: $(TARGET)
-	@echo "Test 1: basic example from task"
-	@expected=0; ./$(TARGET) ./test/t1.csv > /dev/null 2>&1; $(CHECK)
-	@echo ""
-
-	@echo "Test 2: integer arithmetic"
-	@expected=0; ./$(TARGET) ./test/t2.csv > /dev/null 2>&1; $(CHECK)
-	@echo ""
-
-	@echo "Test 3: negative numbers"
-	@expected=0; ./$(TARGET) ./test/t3.csv > /dev/null 2>&1; $(CHECK)
-	@echo ""
-
-	@echo "Test 4: division by zero"
-	@expected=3; ./$(TARGET) ./test/t4.csv > /dev/null 2>&1; $(CHECK)
-	@echo ""
-
-	@echo "Test 5: circular reference"
-	@expected=3; ./$(TARGET) ./test/t5.csv > /dev/null 2>&1; $(CHECK)
-	@echo ""
- 
-	@echo "Test 6: bad cell reference"
-	@expected=3; ./$(TARGET) ./test/t6.csv > /dev/null 2>&1; $(CHECK)
-	@echo ""
- 
-	@echo "Test 7: rows not in order"
-	@expected=0; ./$(TARGET) ./test/t7.csv > /dev/null 2>&1; $(CHECK)
-	@echo ""
- 
-	@echo "Test 8: missing file"
-	@expected=1; ./$(TARGET) ./test/no_such_file.csv > /dev/null 2>&1; $(CHECK)
-	@echo ""
- 
-	@echo "Test 9: bad header"
-	@expected=2; ./$(TARGET) ./test/t9.csv > /dev/null 2>&1; $(CHECK)
-	@echo ""
- 
-	@echo "Test 10: duplicate row id"
-	@expected=2; ./$(TARGET) ./test/t10.csv > /dev/null 2>&1; $(CHECK)
-	@echo ""
- 
-	@echo "Test 11: row width mismatch"
-	@expected=2; ./$(TARGET) ./test/t11.csv > /dev/null 2>&1; $(CHECK)
-	@echo ""
-
-	@echo "Test 12: invalid string cell"
-	@expected=3; ./$(TARGET) ./test/t12.csv > /dev/null 2>&1; $(CHECK)
-	@echo ""
-
-
+	@for t in $(TESTS); do \
+		num=$$(echo $$t | cut -d: -f1); \
+		file=$$(echo $$t | cut -d: -f2); \
+		expected=$$(echo $$t | cut -d: -f3); \
+		name=$$(echo $$t | cut -d: -f4-); \
+		echo "Test $$num: $$name"; \
+		./$(TARGET) ./test/$$file > /dev/null 2>&1; \
+		$(CHECK) \
+		echo ""; \
+	done
 	@echo "All tests done"
