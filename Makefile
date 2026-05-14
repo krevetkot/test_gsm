@@ -16,7 +16,9 @@ TESTS = \
 	9:t9.csv:2:bad_header \
 	10:t10.csv:2:duplicate_row_id \
 	11:t11.csv:2:row_width_mismatch \
-	12:t12.csv:3:invalid_string_cell
+	12:t12.csv:3:invalid_string_cell \
+	13:t13.csv:0:big_file_dynamic_resize \
+	14:t14.csv:3:big_file_with_invalid_formula
 
 CHECK_CODE = \
 	code=$$?; \
