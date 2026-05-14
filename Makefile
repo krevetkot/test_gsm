@@ -1,7 +1,8 @@
 CC      = gcc
-CFLAGS  = -Wall -Wextra -std=c99 -pedantic -O2
+CFLAGS  = -Iinclude -Wall -Wextra -std=c99 -pedantic -O2
 TARGET  = csvutility
-SRC     = main.c csvutility.c
+SRC_FOULDER = ./src/
+SRC     = $(SRC_FOULDER)main.c $(SRC_FOULDER)csvutility.c
 
 TESTS = \
 	1:t1.csv:0:basic_example_from_task \
